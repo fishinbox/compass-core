@@ -1,0 +1,34 @@
+  "tinycore": {
+   "corepure64": {
+    "signatures":["boot"],
+    "version_file":"",
+    "version_file_regex":"",
+    "kernel_arch":"",
+    "kernel_arch_regex":"",
+    "supported_arches":["x86_64","amd64"],
+    "supported_repo_breeds":[],
+    "kernel_file":"vmlinuz64",
+    "initrd_file":"corepure64.gz",
+    "isolinux_ok":true,
+    "default_kickstart":"",
+    "kernel_options":"",
+    "kernel_options_post":"",
+    "boot_files":[]
+   },
+   "generic27": {
+    "signatures":["boot"],
+    "version_file":"",
+    "version_file_regex":"",
+    "kernel_arch":"",
+    "kernel_arch_regex":"",
+    "supported_arches":["i386"],
+    "supported_repo_breeds":[],
+    "kernel_file":"vmlinuz",
+    "initrd_file":"core.gz",
+    "isolinux_ok":true,
+    "default_kickstart":"",
+    "kernel_options":"",
+    "kernel_options_post":"",
+    "boot_files":[]
+   }
+  },

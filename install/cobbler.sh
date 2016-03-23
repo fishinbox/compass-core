@@ -146,7 +146,7 @@ sudo cp -rf $ADAPTERS_HOME/cobbler/conf/cobbler.conf /etc/httpd/conf.d/
 chmod 644 /etc/httpd/conf.d/cobbler.conf
 
 # add tinycore signature
-sudo mv distro_signatures.json /var/lib/cobbler/distro_signatures.json
+sudo sed -i '2 r tinycore_signature.json' /var/lib/cobbler/distro_signatures.json
 chmod 644 /var/lib/cobbler/distro_signatures.json
 # end add
 
