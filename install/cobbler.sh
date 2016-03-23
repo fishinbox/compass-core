@@ -145,6 +145,11 @@ sudo chmod 755 /var/www/cblr_ks
 sudo cp -rf $ADAPTERS_HOME/cobbler/conf/cobbler.conf /etc/httpd/conf.d/
 chmod 644 /etc/httpd/conf.d/cobbler.conf
 
+# add tinycore signature
+sudo mv distro_signatures.json /var/lib/cobbler/distro_signatures.json
+chmod 644 /var/lib/cobbler/distro_signatures.json
+# end add
+
 sudo cp -rn /etc/xinetd.d /root/backup/
 sudo cp  $COMPASSDIR/misc/rsync /etc/xinetd.d/
 
@@ -213,6 +218,26 @@ if [[ "$?" != "0" ]]; then
     echo "failed to get loaders for cobbler"
     exit 1
 fi
+
+# add tinycore 
+sudo mkdir -p /var/lib/cobbler/iso
+sudo wget -c http://10.108.126.182/core.iso -O /var/lib/cobbler/iso/core.iso
+sudo mkdir -p /mnt/CorePure-x86_64
+sudo mount -o loop /var/lib/cobbler/iso/core.iso /mnt/CorePure-x86_64
+if [["$?" != "0"]]; then
+    echo "failed to mount image /mnt/CorePure-x86_64"
+    exit 1
+fi
+cobbler import --path=/mnt/CorePure-x86_64 \
+               --name="CorePure" \
+               --arch=x86_64
+if [["$?" != "0"]]; then
+    echo "failed to import /mnt/CorePure-x86_64"
+    exit 1
+fi
+cobbler profile edit --name=CorePure-x86_64 --enable-menu=True
+cobbler system add --name=default --profile=CorePure-x86_64
+# end add
 
 for i in $UBUNTU_14_04_03_IMAGE_SOURCE; do
     sudo mkdir -p /var/lib/cobbler/iso
