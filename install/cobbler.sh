@@ -146,9 +146,11 @@ sudo cp -rf $ADAPTERS_HOME/cobbler/conf/cobbler.conf /etc/httpd/conf.d/
 chmod 644 /etc/httpd/conf.d/cobbler.conf
 
 # add tinycore signature
-sudo cp -rf $DIR/tinycore_signature.json /var/lib/cobbler/
-sudo sed -i '2 r /var/lib/cobbler/tinycore_signature.json' /var/lib/cobbler/distro_signatures.json
-chmod 644 /var/lib/cobbler/distro_signatures.json
+grep "tinycore" /var/lib/cobbler/distro_signatures.json
+if [[ "$?" != "0" ]]; then
+    sudo cp -rf $DIR/tinycore_signature.json /var/lib/cobbler/
+    sudo sed -i '2 r /var/lib/cobbler/tinycore_signature.json' /var/lib/cobbler/distro_signatures.json
+fi
 # end add
 
 sudo cp -rn /etc/xinetd.d /root/backup/
@@ -232,7 +234,7 @@ fi
 cobbler import --path=/mnt/CorePure-x86_64 \
                --name="CorePure" \
                --arch=x86_64
-if [["$?" != "0"]]; then
+if [[ "$?" != "0" ]]; then
     echo "failed to import /mnt/CorePure-x86_64"
     exit 1
 fi
