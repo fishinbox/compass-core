@@ -163,7 +163,7 @@ loadvars()
         done
     fi
 }
-yum -y install net-tools
+sudo yum -y install net-tools
 loadvars NIC "eth0"
 sudo ifconfig $NIC
 if [ $? -ne 0 ]; then
