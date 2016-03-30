@@ -109,6 +109,15 @@ sudo mkisofs -l -J -r \
 -c boot/isolinux/boot.cat \
 -o ${TARGETDIR}/core.iso ${WORKDIR}/iso/
 
+# backup
+ISODIR=${BASEDIR}/../iso
+if [[ -f ${ISOPATH} ]]; then
+    echo 'found existing core image, backing-up'
+    mv $ISODIR/core.iso ${ISODIR}/core.iso.backup.$(date +%Y%m%d_%H%M%S)
+fi
+# copy new ISO
+cp ${TARGETDIR}/core.iso $ISODIR/core.iso
+
 # clean
 sudo umount ${SRCDIR}/mnt
 #sudo rm -r ${WORKDIR}/
