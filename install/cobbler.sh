@@ -224,7 +224,7 @@ fi
 
 # add tinycore 
 sudo mkdir -p /var/lib/cobbler/iso
-sudo wget -c http://10.108.126.182/core.iso -O /var/lib/cobbler/iso/core.iso
+sudo cp $COMPASSDIR/misc/tcagent/iso/core.iso /var/lib/cobbler/iso/core.iso
 sudo mkdir -p /mnt/CorePure-x86_64
 sudo mount -o loop /var/lib/cobbler/iso/core.iso /mnt/CorePure-x86_64
 if [["$?" != "0"]]; then
