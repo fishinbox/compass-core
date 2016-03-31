@@ -12,7 +12,7 @@ ddns-update-style interim;
 
 allow booting;
 allow bootp;
-deny unknown-clients;
+allow unknown-clients;
 local-address $server;
 log-facility local6;
 
