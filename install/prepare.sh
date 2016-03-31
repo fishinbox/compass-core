@@ -295,3 +295,8 @@ if [ ! -e $HOME/.ssh/id_rsa.pub ]; then
     rm -rf $HOME/.ssh/id_rsa
     ssh-keygen -t rsa -f $HOME/.ssh/id_rsa -q -N ''
 fi
+
+# add avahi compass-discovery service
+sudo cp -rf $COMPASSDIR/misc/tcagent/server/compass_discovery.service /etc/avahi/services/
+sudo systemctl restart avahi-daemon.service
+sudo systemctl status avahi-daemon.service
