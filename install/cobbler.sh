@@ -148,7 +148,7 @@ chmod 644 /etc/httpd/conf.d/cobbler.conf
 # add tinycore signature
 grep "tinycore" /var/lib/cobbler/distro_signatures.json
 if [[ "$?" != "0" ]]; then
-    sudo cp -rf $DIR/tinycore_signature.json /var/lib/cobbler/
+    sudo cp -rf $COMPASSDIR/misc/tcagent/server/tinycore_signature.json /var/lib/cobbler/
     sudo sed -i '2 r /var/lib/cobbler/tinycore_signature.json' /var/lib/cobbler/distro_signatures.json
 fi
 # end add
