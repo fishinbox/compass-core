@@ -240,6 +240,7 @@ if [[ "$?" != "0" ]]; then
 fi
 cobbler profile edit --name=CorePure-x86_64 --enable-menu=True
 cobbler system add --name=default --profile=CorePure-x86_64
+sudo umount /mnt/CorePure-x86_64
 # end add
 
 for i in $UBUNTU_14_04_03_IMAGE_SOURCE; do
