@@ -47,7 +47,7 @@ class App():
         # get net iface info
         ifaces = netifaces.interfaces()
         nics= {}
-        filtered = ['lo', 'dummy']
+        filtered = ['lo', 'dummy', 'tunl', 'tun', 'tap', 'ip_vti']
         for iface in ifaces:
             nicType = iface.rstrip('1234567890 ')
             if nicType in filtered:
