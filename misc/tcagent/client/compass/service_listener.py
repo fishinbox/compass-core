@@ -18,6 +18,7 @@ import time
 import socket 
 import netifaces
 
+from common import *
 
 class ServiceListener(object):
     service_names = []
@@ -30,14 +31,19 @@ class ServiceListener(object):
  
 
 def get_server_info():
+    Log.debug('get_service_info')
     zeroconf = Zeroconf()
     listener = ServiceListener()
-    service_type = "_compass_discovery1._tcp.local."
-    browser = ServiceBrowser(zeroconf, service_type, listener)
+    service_type = "_compass_discovery._tcp.local."
 
+    browser = ServiceBrowser(zeroconf, service_type, listener)
+    Log.debug('enter browser')
+   
     try:
+        Log.debug('enter try')
         while len(listener.service_names)<=0:
             pass
+        Log.debug('tried')
         name = listener.service_names[0]
         service = zeroconf.get_service_info(service_type, name)
         address = socket.inet_ntoa(service.address)
