@@ -16,7 +16,6 @@
 from zeroconf import ServiceBrowser, Zeroconf
 import time
 import socket 
-import netifaces
 
 from common import *
 
@@ -48,15 +47,7 @@ def get_server_info():
         service = zeroconf.get_service_info(service_type, name)
         address = socket.inet_ntoa(service.address)
         port = service.port
-        # get net iface info
-        ifaces = netifaces.interfaces()
-        nics= {}
-        for iface in ifaces:
-            if iface.startswith('lo'):
-                continue
-            MAC = netifaces.ifaddresses(iface)[netifaces.AF_LINK][0]['addr']
-            nics[iface]=MAC
-        return (address, port, nics)
+        return (address, port)
     finally:
         zeroconf.close()
         # for nicely shutdown

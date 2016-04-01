@@ -21,9 +21,12 @@ import time
 import subprocess
 import socket
 import requests
+import json
 
 #third party libs
 from daemon import runner
+import netifaces
+
 
 
 class App():
@@ -40,10 +43,21 @@ class App():
         from common import Log
 
         Log.debug('enter run')
-        address, port, nics = get_server_info()
+        address, port = get_server_info()
+        # get net iface info
+        ifaces = netifaces.interfaces()
+        nics= {}
+        filtered = ['lo', 'dummy']
+        for iface in ifaces:
+            nicType = iface.rstrip('1234567890 ')
+            if nicType in filtered:
+                continue
+            MAC = netifaces.ifaddresses(iface)[netifaces.AF_LINK][0]['addr']
+            nics[iface]=MAC
         Log.debug((address, port, nics))
-        url = 'http://'+address+':'+port+'/servers'
-        r = requests.post(url, data=nics)
+        url = 'http://%s:%s/servers' % (address, port)
+        headers = {'Content-Type': 'application/json'}
+        r = requests.post(url, data=json.dumps(nics), headers=headers)
 
         while True:
             r = requests.get(url)
