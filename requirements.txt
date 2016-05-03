@@ -16,7 +16,7 @@ lazypy
 lockfile
 MySQL-python
 netaddr
-paramiko
+paramiko<2.0.0
 PyChef
 python-daemon!=2.0,!=2.0.1,!=2.0.2,!=2.0.3
 SQLAlchemy>=0.9.0
