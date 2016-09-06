@@ -239,7 +239,7 @@ if [[ "$?" != "0" ]]; then
     exit 1
 fi
 cobbler profile edit --name=CorePure-x86_64 --enable-menu=True
-cobbler system add --name=default --profile=CorePure-x86_64
+cobbler system add --name=default --profile=CorePure-x86_64 --kopts="owner_id=1"
 sudo umount /mnt/CorePure-x86_64
 # end add
 
