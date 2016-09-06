@@ -1,4 +1,4 @@
-# Copyright 2016 Network Intelligence Research Center, 
+# Copyright 2016 Network Intelligence Research Center,
 # Beijing University of Posts and Telecommunications
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,21 +16,24 @@
 # To kick off the script, run the following from the python directory:
 #   PYTHONPATH=`pwd` python testdaemon.py start
 
-#standard python libs
+# standard python libs
 import time
 import subprocess
 import socket
 import requests
 import json
 
-#third party libs
-from daemon import runner
+# third party libs
 import netifaces
 
+# agent libs
+from common import *
 
 
-class App():
-    
+
+
+class DiscoveryAgentApp():
+
     def __init__(self):
         self.stdin_path = '/dev/null'
         self.stdout_path = '/tmp/agent_stdout'
@@ -39,36 +42,45 @@ class App():
         self.pidfile_timeout = 5
 
     def run(self):
-        from service_listener import get_server_info
         from common import Log
-
-        Log.debug('enter run')
-        address, port = get_server_info()
-        # get net iface info
-        ifaces = netifaces.interfaces()
-        nics= {}
-        filtered = ['lo', 'dummy', 'tunl', 'tun', 'tap', 'ip_vti']
-        for iface in ifaces:
-            nicType = iface.rstrip('1234567890 ')
-            if nicType in filtered:
-                continue
-            MAC = netifaces.ifaddresses(iface)[netifaces.AF_LINK][0]['addr']
-            nics[iface]=MAC
-        Log.debug((address, port, nics))
-        url = 'http://%s:%s/servers' % (address, port)
-        headers = {'Content-Type': 'application/json'}
-        r = requests.post(url, data=json.dumps(nics), headers=headers)
-
         while True:
-            r = requests.get(url)
-            if r.text == 'reboot':
-                subprocess.call(['reboot'])
-                break
-            else:
+            try:
+                # using service info as primary and configuration file as fallback
+                url = getApiUrl()
+                if not url:
+                    url = getApiUrl(fromConfig=True)
+                print('url get')
+                headers = {'Content-Type': 'application/json'}
+                # get machine info
+                machine_info = {}
+                with open(CONF.machine_info_file) as file:
+                    machine_info = json.load(file)
+                print('machine info get')
+
+                # submit machine information to the Compass Service
+                # TODO
+                r = requests.post(url, data=json.dumps(machine_info), headers=headers)
+                print('posted')
+
+                # Again and again
+                # wait for n Seconds
+                # TODO
+
+                #r = requests.get(url)
+                #if r.text == 'reboot':
+                #    subprocess.call(['reboot'])
+                #    break
+            except:
+                print('bug at run')
+                import traceback
+                traceback.print_exc()
+            finally:
                 time.sleep(5)
-                continue
 
 
-app = App()
-daemon_runner = runner.DaemonRunner(app)
-daemon_runner.do_action()
+
+agent = DiscoveryAgentApp()
+agent_runner = runner.DaemonRunner(agent)
+agent_runner.do_action()
+
+
