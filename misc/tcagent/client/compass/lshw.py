@@ -138,8 +138,14 @@ def getProcessor(inventory):
             product = i.find('product').text
             # print "width: " + i.find('width').text
             #pprint(etree.tostring(i.find('configuration')))
-            cores = i.find('configuration/setting/[@id="cores"]').get('value')
-            enabledcores = i.find('configuration/setting/[@id="enabledcores"]').get('value')
+            try:
+                cores = i.find('configuration/setting/[@id="cores"]').get('value')
+            except:
+                cores = 1
+            try:
+                enabledcores = i.find('configuration/setting/[@id="enabledcores"]').get('value')
+            except:
+                enabledcores = 1
             try:
                 threads = i.find('configuration/setting/[@id="threads"]').get('value')
             except:

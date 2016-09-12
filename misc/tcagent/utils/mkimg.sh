@@ -22,6 +22,10 @@ SRCDIR=/tmp/compass_discovery_agent/src
 WORKDIR=/tmp/compass_discovery_agent/working
 TARGETDIR=/tmp/compass_discovery_agent/target
 
+# clear WORK and TARGET directory
+sudo rm -rf ${WORKDIR}
+sudo rm -rf ${TARGETDIR}
+
 # make directories
 mkdir -p ${SRCDIR}
 mkdir -p ${WORKDIR}
@@ -92,6 +96,8 @@ done
 
 # Get lshw
 git clone -b ${lshw_version} ${lshw_repo} ${SRCDIR}/lshw
+# Checkout B.02.18 version lshw
+git --git-dir=${SRCDIR}/lshw/.git/ checkout B.02.18
 
 # start working
 # iso root
@@ -134,11 +140,12 @@ done
 sudo cp -r ${BASEDIR}/../client/* ${WORKDIR}/initfs-root/opt/
 # Copy Python Dependencies
 sudo cp -r ${SRCDIR}/py ${WORKDIR}/initfs-root/opt/
+
 # Copy lshw
 sudo cp -r ${SRCDIR}/lshw ${WORKDIR}/initfs-root/opt/
 
 # rebuild initfs image
-sudo sh -c "find | cpio -o -H newc | gzip -9 > ${WORKDIR}/iso/${initfs}"
+sudo sh -c "find | cpio -o -H newc | gzip -2 > ${WORKDIR}/iso/${initfs}"
 
 # make ISO image
 sudo mkisofs -l -J -r \
