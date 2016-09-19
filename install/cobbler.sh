@@ -238,8 +238,8 @@ if [[ "$?" != "0" ]]; then
     echo "failed to import /mnt/CorePure-x86_64"
     exit 1
 fi
-cobbler profile edit --name=CorePure-x86_64 --enable-menu=True
-cobbler system add --name=default --profile=CorePure-x86_64 --kopts="owner_id=1"
+cobbler profile edit --name=CorePure-x86_64 --enable-menu=True --kopts="owner_id=1"
+cobbler system add --name=default --profile=CorePure-x86_64
 sudo umount /mnt/CorePure-x86_64
 # end add
 
